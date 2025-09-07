@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!-- ADICIONADO: scroll-smooth para navegação suave entre seções -->
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contratos On Line - Seu Gerador de Contratos Inteligente</title>
+    <meta name="description" content="Geração automática e inteligente de contratos brasileiros com inteligência artificial." />
+    <meta name="author" content="Lovable" />
+
+    <!-- Meta Tags Otimizadas -->
+    <meta property="og:title" content="Contratos On Line - O seu gerador de contratos" />
+    <meta property="og:description" content="Geração automática e inteligente de contratos brasileiros." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://placehold.co/1200x630/0d9488/FFFFFF?text=Contratos+Online" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta name="twitter:image" content="https://placehold.co/1200x630/0d9488/FFFFFF?text=Contratos+Online" />
+
+    <!-- Tailwind CSS & Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Libraries for DOCX Export -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        .recording { animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(20, 184, 166, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
+        }
+    </style>
+</head>
+<!-- MODIFICADO: Layout de fundo e estrutura geral para um visual mais profissional -->
+<body class="bg-gray-50 text-gray-800">
+
+<div class="w-full min-h-screen flex flex-col items-center p-4 bg-gradient-to-br from-gray-50 to-gray-100">
+
+    <!-- MODIFICADO: Header agora é 'sticky', com ícone à esquerda -->
+    <header class="sticky top-0 z-50 w-full max-w-5xl mx-auto bg-white/80 backdrop-blur-lg rounded-xl shadow-md mb-8">
+        <div class="flex justify-between items-center p-4 md:p-5">
+            <div class="flex items-center gap-4">
+                <img src="https://i.ibb.co/DHbzMcnh/Copilot-20250907-16172122.png" alt="Ícone da Lovable" class="h-12 w-12 object-contain">
+                <h1 class="text-2xl md:text-3xl font-bold text-teal-600 hidden sm:block">Contratos On Line</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-4 md:space-x-6 text-base font-medium">
+                    <li><a href="#home" class="nav-link text-gray-600 hover:text-teal-600 transition-colors">Início</a></li>
+                    <li><a href="#create-contract" class="nav-link text-gray-600 hover:text-teal-600 transition-colors">Criar</a></li>
+                    <li><a href="#donations" class="nav-link text-gray-600 hover:text-teal-600 transition-colors">Apoiar</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-5xl w-full mx-auto">
+        <!-- Main Content -->
+        <main>
+            <!-- Seção: Home -->
+            <section id="home" class="page-section active text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Simplifique a Criação de Contratos</h2>
+                <p class="text-gray-600 leading-relaxed text-lg max-w-3xl mx-auto">Nossa plataforma utiliza inteligência artificial para facilitar a criação de contratos brasileiros. Descreva suas necessidades e nós geramos um rascunho detalhado para você. Simples, rápido e eficiente.</p>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button data-target="#create-contract" class="nav-button bg-teal-600 text-white font-semibold py-3 px-8 rounded-lg shadow-sm hover:bg-teal-700 transition-all transform hover:scale-105">Comece a Criar Seu Contrato ✨</button>
+                    <a href="#donations" class="nav-link text-teal-600 font-semibold py-3 px-8 rounded-lg border-2 border-teal-600 text-center hover:bg-teal-50 transition-colors">Apoie o Projeto</a>
+                </div>
+            </section>
+
+            <!-- Seção: Criar Contrato -->
+            <section id="create-contract" class="page-section">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Gerador de Contratos</h2>
+                <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mb-6" role="alert">
+                    <p class="font-bold">Dicas para um bom resultado:</p>
+                    <ul class="list-disc list-inside mt-2 text-sm space-y-1">
+                        <li>Seja específico: inclua nomes, valores, datas, locais e objetos do contrato.</li>
+                        <li>Lembre-se: a IA pode cometer erros. Revise sempre o documento gerado com um profissional.</li>
+                    </ul>
+                </div>
+                
+                <div class="relative">
+                    <textarea id="contract-description" rows="6" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-shadow shadow-sm" placeholder="Ex: Contrato de aluguel de um apartamento em São Paulo, entre [nome do locador] e [nome do locatário], com valor de R$2000,00 mensais..."></textarea>
+                    <div id="description-warning" class="text-red-600 text-sm mt-1 hidden">Por favor, descreva os detalhes do contrato.</div>
+                    <div id="content-warning" class="hidden mt-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-800 text-sm flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                        <p><b class="font-semibold">Conteúdo Inválido:</b> Por favor, use apenas texto apropriado para a finalidade do site.</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-col sm:flex-row items-center gap-4">
+                    <button id="generate-contract-btn" class="bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg w-full hover:bg-teal-700 transition-all transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:scale-100 shadow-md">
+                        Gerar Contrato com IA ✨
+                    </button>
+                    <button id="voice-input-btn" class="bg-gray-700 text-white p-3 rounded-full hover:bg-gray-800 transition-colors flex-shrink-0 shadow-md" title="Usar comando de voz" aria-label="Ativar comando de voz">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+                    </button>
+                </div>
+                <div id="voice-status" class="text-sm text-gray-600 mt-2 text-center h-5"></div>
+
+                <div id="loading-spinner" class="hidden mt-6 text-center">
+                    <div class="animate-spin inline-block w-10 h-10 border-4 border-t-teal-500 border-gray-200 rounded-full"></div>
+                    <p class="mt-3 text-gray-600 font-medium">Gerando seu contrato, por favor aguarde...</p>
+                </div>
+                
+                <div id="contract-output-container" class="hidden mt-6 bg-gray-50 p-5 rounded-lg border border-gray-200 shadow-inner">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Rascunho do Contrato Gerado</h3>
+                    <div id="contract-output" class="prose max-w-none text-justify"></div>
+                    <button id="export-docx-btn" class="mt-6 bg-green-600 text-white font-semibold py-2 px-5 rounded-lg hover:bg-green-700 transition-colors w-full sm:w-auto disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                        Exportar para DOCX
+                    </button>
+                </div>
+            </section>
+
+            <!-- Seção: Doações -->
+            <section id="donations" class="page-section text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Apoie nosso Projeto ❤️</h2>
+                <p class="text-gray-600 mb-8 max-w-2xl mx-auto">Sua contribuição é fundamental para mantermos esta ferramenta gratuita e em constante aprimoramento. Agradecemos imensamente o seu apoio!</p>
+                
+                <div class="max-w-md mx-auto bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Faça uma doação via PIX</h3>
+                    <img id="pix-qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126580014BR.GOV.BCB.PIX01363f9ee533-3d3f-4488-9fb3-4b77dc52d9a75204000053039865802BR5925Lucas%20Vinicius%20Sampaio%20Li6009SAO%20PAULO621405103emDyRbI9d6304836D" alt="PIX QR Code" class="mx-auto mb-4 rounded-lg shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/200x200/e2e8f0/4a5568?text=Erro+ao+carregar+QR+Code';">
+                    <p class="text-sm text-gray-500 mb-2">Ou use a chave aleatória:</p>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between shadow-sm">
+                        <span id="pix-key" class="text-gray-700 font-mono text-xs sm:text-sm break-all">3f9ee533-3d3f-4488-9fb3-4b77dc52d9a7</span>
+                    </div>
+                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button id="copy-key-btn" class="w-full bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors">Copiar Chave</button>
+                        <button id="copy-qr-btn" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">Copiar Cód. QR</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+ <!-- MODIFICADO: Rodapé com novo ícone e email visível -->
+    <footer class="w-full max-w-5xl mx-auto text-center py-8 mt-10 text-gray-600 text-sm border-t-2 border-gray-200">
+        <img src="https://i.ibb.co/9kYBwynZ/Cart-o-de-visita-para-eletricista-moderno-simples-amarelo-e-preto-removebg-preview.png" alt="Logo Contratos On Line" class="mx-auto mb-4 h-20">
+        <p class="font-semibold text-base text-gray-800">Desenvolvido por Lucas Vinicius Sampaio Lima.</p>
+        <p class="mt-1">Uma solução moderna para suas necessidades contratuais.</p>
+        <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 mt-4">
+            <a href="mailto:lucasviniciussampaiolima@gmail.com" class="flex items-center gap-2 text-teal-600 hover:underline" aria-label="Enviar email">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+                <span>lucasviniciussampaiolima@gmail.com</span>
+            </a>
+            <span class="text-gray-300 hidden sm:inline">|</span>
+            <a href="https://wa.me/556993082950" target="_blank" class="flex items-center gap-2 text-teal-600 hover:underline" aria-label="Contato via Whatsapp">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.789 0l-2 4A1 1 0 008 8h4a1 1 0 00.894-1.447l-2-4zM10 12a1 1 0 100 2h.01a1 1 0 100-2H10z" /><path fill-rule="evenodd" d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm2 0a6 6 0 1112 0 6 6 0 01-12 0z" clip-rule="evenodd" /></svg>
+                <span>Whatsapp: 69 99308-2950</span>
+            </a>
+        </div>
+    </footer>
+</div>
+
+<!-- ADICIONADO: Script agora é um arquivo externo e usa 'defer' para otimizar o carregamento -->
+<script src="app.js" defer></script>
+
+</body>
+</html>
