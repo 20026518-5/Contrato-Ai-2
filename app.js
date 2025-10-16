@@ -134,12 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // SIMULAÇÃO: Como a chave está sendo gerenciada pela plataforma, vamos manter a chamada direta por enquanto.
             // Em um projeto real, USE O MÉTODO DO BACKEND acima.
-            const API_KEY = "AIzaSyD9OuELHTB4ihPcK3Ds2mSB0632vdNJdac"; // A plataforma irá injetar a chave aqui. Não coloque a sua chave aqui.
+            const API_KEY = "AIzaSyB9xORW8tLpW5x4Lu3VO8P7ih9MOsYm2II"; // A plataforma irá injetar a chave aqui. Não coloque a sua chave aqui.
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/${MODEL}:generateContent?key=${API_KEY}`, {
+                // ...
             });
 
             if (!response.ok) {
@@ -296,4 +294,5 @@ document.addEventListener("DOMContentLoaded", function () {
     // Roda a aplicação
     initialize();
 });
+
 
