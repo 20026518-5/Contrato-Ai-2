@@ -139,7 +139,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const API_KEY = "AIzaSyB9xORW8tLpW5x4Lu3VO8P7ih9MOsYm2II"; // A plataforma irá injetar a chave aqui. Não coloque a sua chave aqui.
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
             const response = await fetch(`https://generativelanguage.googleapis.com/${API_VERSION}/models/${MODEL}:generateContent?key=${API_KEY}`, {
-                // ...
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
