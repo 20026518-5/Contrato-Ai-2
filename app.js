@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // ATUALIZADO: Modelo de IA estável e recomendado.
     const MODEL = "gemini-1.5-flash-latest";
-    // A API Gemini 1.5 requer o endpoint v1beta para o método generateContent.
-    const API_VERSION = "v1beta";
+    // Alguns projetos possuem acesso a versões diferentes da API Gemini.
+    const API_VERSIONS = ["v1beta", "v1"];
     
     // --- ELEMENTOS DO DOM ---
     const sections = document.querySelectorAll(".page-section");
@@ -138,17 +138,36 @@ document.addEventListener("DOMContentLoaded", function () {
             // Em um projeto real, USE O MÉTODO DO BACKEND acima.
             const API_KEY = "AIzaSyB9xORW8tLpW5x4Lu3VO8P7ih9MOsYm2II"; // A plataforma irá injetar a chave aqui. Não coloque a sua chave aqui.
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
-            const response = await fetch(`https://generativelanguage.googleapis.com/${API_VERSION}/models/${MODEL}:generateContent?key=${API_KEY}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
+            let data = null;
+            let lastErrorMessage = "";
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Erro na API: ${errorData.error.message}`);
+            for (const version of API_VERSIONS) {
+                const response = await fetch(`https://generativelanguage.googleapis.com/${version}/models/${MODEL}:generateContent?key=${API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const responseBody = await response.json();
+
+                if (response.ok) {
+                    data = responseBody;
+                    break;
+                }
+
+                const apiMessage = responseBody?.error?.message;
+                lastErrorMessage = apiMessage ? `Erro na API (${version}): ${apiMessage}` : `Erro na API (${version}): ${response.statusText}`;
+
+                // Se o modelo não estiver disponível nessa versão, tenta a próxima
+                const isModelVersionError = response.status === 404 || (apiMessage && apiMessage.includes("is not found for API version"));
+                if (!isModelVersionError || version === API_VERSIONS[API_VERSIONS.length - 1]) {
+                    throw new Error(lastErrorMessage);
+                }
             }
-            const data = await response.json();
+
+            if (!data) {
+                throw new Error(lastErrorMessage || "Não foi possível gerar o contrato. Tente novamente mais tarde.");
+            }
             const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
 
