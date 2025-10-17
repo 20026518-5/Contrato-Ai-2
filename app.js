@@ -4,9 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // INSTRUÇÃO: Coloque a URL da sua logo aqui.
     const LOGO_URL = 'https://placehold.co/200x60/0d9488/FFFFFF?text=Contratos+On+Line';
     
-    // ATUALIZADO: Modelo de IA estável e recomendado.
-    const MODEL = "gemini-1.5-flash-latest";
-    
     // --- ELEMENTOS DO DOM ---
     const sections = document.querySelectorAll(".page-section");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -84,7 +81,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- LÓGICA DE GERAÇÃO DE CONTRATO ---
     async function handleGenerateContract() {
         const description = descriptionInput.value.trim();
-        
+
+        // ... (lógica de validação existente)
         // Reseta avisos
         descriptionWarning.classList.add("hidden");
         contentWarning.classList.add("hidden");
@@ -94,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
             descriptionInput.focus();
             return;
         }
-        
+
         if (isContentInvalid(description)) {
             contentWarning.classList.remove("hidden");
             descriptionInput.value = '';
@@ -108,19 +106,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
             const prompt = `Crie um contrato formal, completo e detalhado em português do Brasil, baseado estritamente na seguinte descrição, formatado em Markdown. O contrato deve ser claro, objetivo e seguir as boas práticas legais brasileiras. Descrição: ${description}`;
-            
-            // !!! MUDANÇA CRÍTICA DE SEGURANÇA !!!
-            // A chave de API NUNCA deve ficar no código do frontend (visível para o usuário).
-            // O ideal é criar um endpoint no seu backend (ex: /api/generate-contract) que recebe o 'prompt'
-            // e faz a chamada para a API do Google, adicionando a chave de forma segura no servidor.
-            // O código abaixo simula essa chamada para um backend.
-            
-            // Exemplo de como a chamada DEVERIA ser feita para o seu backend:
-            /*
-            const response = await fetch('/api/generate-contract', {
+
+            // A chamada agora é para a sua Netlify Function
+            const response = await fetch("/.netlify/functions/generate-contract", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt })
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    prompt
+                })
             });
 
             if (!response.ok) {
@@ -130,23 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const data = await response.json();
             const generatedText = data.text;
-            */
-
-            // SIMULAÇÃO: Como a chave está sendo gerenciada pela plataforma, vamos manter a chamada direta por enquanto.
-            // Em um projeto real, USE O MÉTODO DO BACKEND acima.
-            const API_KEY = "AIzaSyB9xORW8tLpW5x4Lu3VO8P7ih9MOsYm2II"; // A plataforma irá injetar a chave aqui. Não coloque a sua chave aqui.
-            const payload = { contents: [{ parts: [{ text: prompt }] }] };
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/${MODEL}:generateContent?key=${API_KEY}`, {
-                // ...
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Erro na API: ${errorData.error.message}`);
-            }
-            const data = await response.json();
-            const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
 
             if (generatedText) {
                 output.innerHTML = marked.parse(generatedText);
