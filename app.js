@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // ATUALIZADO: Modelo de IA estável e recomendado.
     const MODEL = "gemini-1.5-flash-latest";
+    // A API Gemini 1.5 requer o endpoint v1beta para o método generateContent.
+    const API_VERSION = "v1beta";
     
     // --- ELEMENTOS DO DOM ---
     const sections = document.querySelectorAll(".page-section");
@@ -136,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Em um projeto real, USE O MÉTODO DO BACKEND acima.
             const API_KEY = "AIzaSyB9xORW8tLpW5x4Lu3VO8P7ih9MOsYm2II"; // A plataforma irá injetar a chave aqui. Não coloque a sua chave aqui.
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/${MODEL}:generateContent?key=${API_KEY}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/${API_VERSION}/models/${MODEL}:generateContent?key=${API_KEY}`, {
                 // ...
             });
 
