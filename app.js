@@ -4,8 +4,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // INSTRUÇÃO: Coloque a URL da sua logo aqui.
     const LOGO_URL = 'https://placehold.co/200x60/0d9488/FFFFFF?text=Contratos+On+Line';
     
-    // ATUALIZADO: Modelo de IA estável e recomendado.
-    const MODEL = "gemini-1.5-flash-latest";
+    // ATUALIZADO: lista de combinações (versão + modelo) permitidas.
+    const API_TARGETS = [
+        { version: "v1beta", model: "gemini-1.5-flash" },
+        { version: "v1beta", model: "gemini-1.0-pro" },
+        { version: "v1", model: "gemini-pro" }
+    ];
     
     // --- ELEMENTOS DO DOM ---
     const sections = document.querySelectorAll(".page-section");
@@ -136,15 +140,39 @@ document.addEventListener("DOMContentLoaded", function () {
             // Em um projeto real, USE O MÉTODO DO BACKEND acima.
             const API_KEY = "AIzaSyB9xORW8tLpW5x4Lu3VO8P7ih9MOsYm2II"; // A plataforma irá injetar a chave aqui. Não coloque a sua chave aqui.
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/${MODEL}:generateContent?key=${API_KEY}`, {
-                // ...
-            });
+            let data = null;
+            let lastErrorMessage = "";
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Erro na API: ${errorData.error.message}`);
+            for (const [index, { version, model }] of API_TARGETS.entries()) {
+                const response = await fetch(`https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const responseBody = await response.json();
+
+                if (response.ok) {
+                    data = responseBody;
+                    break;
+                }
+
+                const apiMessage = responseBody?.error?.message;
+                lastErrorMessage = apiMessage
+                    ? `Erro na API (${version}/${model}): ${apiMessage}`
+                    : `Erro na API (${version}/${model}): ${response.statusText}`;
+
+                // Se o modelo não estiver disponível nessa versão, tenta a próxima
+                const isModelVersionError = response.status === 404
+                    || (apiMessage && /is not found for API version|is not supported for generateContent/i.test(apiMessage));
+                if (!isModelVersionError || index === API_TARGETS.length - 1) {
+                    throw new Error(lastErrorMessage);
+                }
             }
-            const data = await response.json();
+
+            if (!data) {
+                throw new Error(lastErrorMessage || "Não foi possível gerar o contrato. Verifique se o projeto possui acesso ao modelo Gemini selecionado ou tente novamente mais tarde.");
+            }
             const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
 
