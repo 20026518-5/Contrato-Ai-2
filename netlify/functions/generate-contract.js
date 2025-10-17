@@ -1,7 +1,7 @@
 exports.handler = async function(event, context) {
     // A API Key será acessada através das variáveis de ambiente do Netlify
     const API_KEY = process.env.API_KEY;
-    const MODEL = "gemini-1.5-flash";
+    const MODEL = "gemini-pro";
 
     // O prompt enviado pelo frontend estará no corpo da requisição
     const { prompt } = JSON.parse(event.body);
