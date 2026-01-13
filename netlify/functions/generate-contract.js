@@ -1,7 +1,9 @@
 exports.handler = async function(event, context) {
     // A API Key será acessada através das variáveis de ambiente do Netlify
     const API_KEY = process.env.API_KEY;
-    const MODEL = "gemini-pro";
+    
+    // CORREÇÃO: Atualizado para o modelo mais recente e suportado
+    const MODEL = "gemini-1.5-flash";
 
     // O prompt enviado pelo frontend estará no corpo da requisição
     const { prompt } = JSON.parse(event.body);
@@ -25,6 +27,7 @@ exports.handler = async function(event, context) {
 
         if (!response.ok) {
             const errorData = await response.json();
+            console.error("Erro detalhado da API:", errorData); // Log para ajudar no debug
             return {
                 statusCode: response.status,
                 body: JSON.stringify({ error: `Erro na API: ${errorData.error.message}` })
@@ -40,6 +43,7 @@ exports.handler = async function(event, context) {
         };
 
     } catch (error) {
+        console.error("Erro interno:", error);
         return {
             statusCode: 500,
             body: JSON.stringify({ error: 'Ocorreu um erro ao processar a sua requisição.' })
