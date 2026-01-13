@@ -1,11 +1,9 @@
 exports.handler = async function(event, context) {
-    // A API Key será acessada através das variáveis de ambiente do Netlify
     const API_KEY = process.env.API_KEY;
     
-    // CORREÇÃO: Atualizado para o modelo mais recente e suportado
-   const MODEL = "gemini-1.5-flash-latest";
+    // ATUALIZADO: Modelo 2.5 Flash (Padrão 2026)
+    const MODEL = "gemini-2.5-flash";
 
-    // O prompt enviado pelo frontend estará no corpo da requisição
     const { prompt } = JSON.parse(event.body);
 
     const payload = {
@@ -17,6 +15,7 @@ exports.handler = async function(event, context) {
     };
 
     try {
+       // Mantemos v1beta, que é compatível com os modelos 2.5
        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: {
@@ -27,7 +26,7 @@ exports.handler = async function(event, context) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error("Erro detalhado da API:", errorData); // Log para ajudar no debug
+            console.error("Erro detalhado da API:", errorData);
             return {
                 statusCode: response.status,
                 body: JSON.stringify({ error: `Erro na API: ${errorData.error.message}` })
