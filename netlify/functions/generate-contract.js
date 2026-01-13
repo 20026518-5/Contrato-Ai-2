@@ -3,7 +3,7 @@ exports.handler = async function(event, context) {
     const API_KEY = process.env.API_KEY;
     
     // CORREÇÃO: Atualizado para o modelo mais recente e suportado
-   const MODEL = "gemini-1.5-flash-lates";
+   const MODEL = "gemini-1.5-flash-002";
 
     // O prompt enviado pelo frontend estará no corpo da requisição
     const { prompt } = JSON.parse(event.body);
